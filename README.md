@@ -1,2 +1,2 @@
-# flutter_beginner
+# flutter beginner
 first project with flutter
