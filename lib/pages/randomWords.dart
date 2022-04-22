@@ -1,4 +1,7 @@
+import 'dart:ffi';
+
 import 'package:english_words/english_words.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class RandomWords extends StatefulWidget {
@@ -12,10 +15,52 @@ class _RandomWordsState extends State<RandomWords> {
   final _suggestions = <WordPair>[];
   final _saved = <WordPair>{};
   final _biggerFont = const TextStyle(fontSize: 18.0);
+
   @override
   Widget build(BuildContext context) {
     final wordPair = WordPair.random();
+    void _pushSaved() {
+      Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (context) {
+            final tiles = _saved.map(
+              (pair) {
+                return ListTile(
+                  title: Text(
+                    pair.asPascalCase,
+                    style: _biggerFont,
+                  ),
+                );
+              },
+            );
+            final divided = tiles.isNotEmpty
+                ? ListTile.divideTiles(
+                    context: context,
+                    tiles: tiles,
+                  ).toList()
+                : <Widget>[];
+
+            return Scaffold(
+              appBar: AppBar(
+                title: const Text('Saved Suggestions'),
+              ),
+              body: ListView(children: divided),
+            );
+          },
+        ), // ...to here.
+      );
+    }
+
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Startup Name Generator'),
+        actions: [
+          IconButton(
+              onPressed: _pushSaved,
+              icon: const Icon(Icons.list),
+              tooltip: 'Save Suggestions'),
+        ],
+      ),
       body: ListView.builder(
           padding: const EdgeInsets.all(16.0),
           itemBuilder: (context, i) {
@@ -44,6 +89,26 @@ class _RandomWordsState extends State<RandomWords> {
                 semanticLabel: alreadySaved ? 'Remove from saved' : 'Save',
               ), // to here.
               onTap: () {
+                // Widget okButton = TextButton(
+                //   child: Text("OK"),
+                //   onPressed: () {
+                //     print('Ok');
+                //   },
+                // );
+                // AlertDialog alert = AlertDialog(
+                //   title: Text("My title"),
+                //   content: Text("This is my message."),
+                //   actions: [
+                //     okButton,
+                //   ],
+                // );
+                // // show the dialog
+                // showDialog(
+                //   context: context,
+                //   builder: (BuildContext context) {
+                //     return alert;
+                //   },
+                // );
                 setState(() {
                   if (alreadySaved) {
                     _saved.remove(_suggestions[index]);
@@ -58,4 +123,4 @@ class _RandomWordsState extends State<RandomWords> {
   }
 }
 
-//https://codelabs.developers.google.com/codelabs/first-flutter-app-pt2#4
+//https://codelabs.developers.google.com/codelabs/first-flutter-app-pt2#5
