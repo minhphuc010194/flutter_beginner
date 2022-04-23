@@ -12,9 +12,17 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      // debugShowMaterialGrid: true,
+      // showSemanticsDebugger: true,
       title: 'random text list',
-      home: RandomWords(),
+      theme: ThemeData(
+        appBarTheme: const AppBarTheme(
+            backgroundColor: Colors.white,
+            foregroundColor: Color.fromARGB(159, 170, 9, 47)),
+      ),
+      home: const RandomWords(),
     );
   }
 }
